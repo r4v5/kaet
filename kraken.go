@@ -65,6 +65,19 @@ func getGame(channel string, rating bool) string {
 	return data.Game
 }
 
+func getVodID(channel string) string {
+	var data struct {
+		Videos []struct {
+			Url string `json:"url"`
+		}
+	}
+	err := kraken(&data, "channels", channel, "videos?broadcasts=true")
+	if err != nil {
+		log.Printf("getVod=%v", err)
+	}
+	return data.Videos[0].Url
+}
+
 var ratings = struct {
 	sync.Mutex
 	m map[string]string

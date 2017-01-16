@@ -72,6 +72,7 @@ func init() {
 	cmds.cmds["game"] = &command{func(_ string) string { return getGame(CHANNEL, true) }, false, false}
 	cmds.cmds["quote"] = &command{cmdGetQuote, false, false}
 	cmds.cmds["sourcecode"] = &command{func(q string) string { return "Contribute to kaet's source code at github.com/Fugiman/kaet VoHiYo" }, false, false}
+	cmds.cmds["highlight"] = &command{func(context string) string { return addHighlight(CHANNEL, context) }, false, false}
 
 	// Mod commands
 	cmds.cmds["addquote"] = &command{cmdAddQuote, true, false}
@@ -187,6 +188,14 @@ func cmdRemoveCommand(data string) string {
 	cmds.store.Remove(trigger)
 	delete(cmds.cmds, trigger)
 	return ""
+}
+
+func addHighlight(user string, context string) string {
+	t := time.Now().Round(time.Second)
+	uptime := getUptime(CHANNEL)
+	vodID := getVodID(CHANNEL)
+	//highlights.Append("TODO: textual representation of this")
+	return fmt.Sprintf("%s | %s | %s | %s | %s", vodID, uptime, user, context, t)
 }
 
 func split(s string, p int) []string {
