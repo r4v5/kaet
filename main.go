@@ -26,6 +26,7 @@ var (
 	CLIENT_ID     = os.Getenv("CLIENT_ID")
 	CLIENT_SECRET = os.Getenv("CLIENT_SECRET")
 	GITHUB_SECRET = os.Getenv("GITHUB_SECRET")
+	debug         = os.Getenv("DEBUG")
 )
 
 const IRCIdleConnectionTimeout = 5 * time.Minute
@@ -58,7 +59,9 @@ func main() {
 
 	go func() {
 		for m := range out {
-			//log.Printf("[OUT] %s", m)
+			if (debug != "")  {
+				log.Printf("[OUT] %s", m)
+			}
 			fmt.Fprint(c, m)
 			time.Sleep(time.Second)
 		}
@@ -69,7 +72,9 @@ func main() {
 			c.SetReadDeadline(time.Now().Add(IRCIdleConnectionTimeout))
 			line, err := in.ReadSlice('\n')
 			must(err)
-			//log.Printf("[IN]  %s", line)
+			if (debug != "") {
+				log.Printf("[IN]  %s", line)
+			}
 			go handle(out, parse(line))
 		}
 	}()
