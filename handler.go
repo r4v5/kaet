@@ -51,6 +51,8 @@ func (c *commands) Get(key string) *command {
 func init() {
 	cmdPrefixes = []string{"!", USER + " ", fmt.Sprintf("@%s ", USER)}
 
+	highlights = Store("highlights")
+
 	quotes = Store("quotes")
 
 	cmds = &commands{
@@ -194,8 +196,9 @@ func addHighlight(user string, context string) string {
 	t := time.Now().Round(time.Second)
 	uptime := getUptime(CHANNEL)
 	vodID := getVodID(CHANNEL)
-	//highlights.Append("TODO: textual representation of this")
-	return fmt.Sprintf("%s | %s | %s | %s | %s", vodID, uptime, user, context, t)
+	highlight = fmt.Sprintf("%s , %s , %s , %s , %s", vodID, uptime, user, context, t)
+	highlights.Append(highlight)
+	return fmt.Sprintf("Highlight added, %s.", user)
 }
 
 func split(s string, p int) []string {

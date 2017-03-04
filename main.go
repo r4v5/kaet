@@ -59,7 +59,7 @@ func main() {
 
 	go func() {
 		for m := range out {
-			if (debug != "")  {
+			if debug != "" {
 				log.Printf("[OUT] %s", m)
 			}
 			fmt.Fprint(c, m)
@@ -72,7 +72,7 @@ func main() {
 			c.SetReadDeadline(time.Now().Add(IRCIdleConnectionTimeout))
 			line, err := in.ReadSlice('\n')
 			must(err)
-			if (debug != "") {
+			if debug != "" {
 				log.Printf("[IN]  %s", line)
 			}
 			go handle(out, parse(line))

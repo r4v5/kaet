@@ -25,7 +25,9 @@ func kraken(data interface{}, path ...string) error {
 		return err
 	}
 	defer resp.Body.Close()
-
+	if debug != "" {
+		log.Printf("KRAKEN REQ: %s \n \n KRAKEN RESP: %s", req, resp)
+	}
 	return json.NewDecoder(resp.Body).Decode(data)
 }
 
@@ -40,8 +42,9 @@ func getUptime(channel string) string {
 		}
 	}
 	err := kraken(&data, "streams", channel)
+
 	if err != nil || data.Stream == nil {
-		log.Printf("getUptime=%v", err)
+		log.Printf("getUptime=%v, data=%s", err, data)
 		return fmt.Sprintf("%s is not online", channel)
 	}
 
