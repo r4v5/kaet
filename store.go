@@ -2,13 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
-	"fmt"
 )
 
 type store struct {
@@ -69,6 +69,12 @@ func (s *store) Blank(key string) bool {
 }
 
 // READ
+func (s *store) All() string {
+	s.RLock()
+	defer s.RUnlock()
+	return fmt.Sprint(json.Marshal(&s.data))
+}
+
 func (s *store) Keys() []string {
 	s.RLock()
 	defer s.RUnlock()

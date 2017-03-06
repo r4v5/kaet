@@ -17,6 +17,11 @@ import (
 func init() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/_github", githubWebhook)
+	http.HandleFunc("/highlights", getAllHighlights)
+}
+
+func getAllHighlights(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, highlights.All())
 }
 
 func home(w http.ResponseWriter, r *http.Request) {

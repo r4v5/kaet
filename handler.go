@@ -13,6 +13,7 @@ var (
 	cmdPrefixes []string
 	quotes      *store
 	cmds        *commands
+	highlights  *store
 )
 
 type commands struct {
@@ -24,8 +25,8 @@ type commands struct {
 }
 
 type command struct {
-	fn      func(string) string
-	modOnly bool
+	fn        func(string) string
+	modOnly   bool
 	removable bool
 }
 
@@ -170,7 +171,7 @@ func cmdAddCommand(data string) string {
 	v := split(data, 2)
 	trigger, msg := strings.TrimPrefix(v[0], "!"), v[1]
 	existingCmd, existingCmdFound := cmds.cmds[trigger]
-	if (existingCmdFound && !existingCmd.removable) {
+	if existingCmdFound && !existingCmd.removable {
 		return "I'm afraid I can't modify that command"
 	}
 	cmds.store.Add(trigger, msg)
@@ -183,8 +184,8 @@ func cmdRemoveCommand(data string) string {
 	defer cmds.Unlock()
 	v := split(data, 2)
 	trigger := strings.TrimPrefix(v[0], "!")
-	existingCommand, existingCommandFound := cmds.cmds[trigger];
-	if (existingCommandFound && !existingCommand.removable) {
+	existingCommand, existingCommandFound := cmds.cmds[trigger]
+	if existingCommandFound && !existingCommand.removable {
 		return "I'm afraid I can't remove that command"
 	}
 	cmds.store.Remove(trigger)
@@ -196,7 +197,7 @@ func addHighlight(user string, context string) string {
 	t := time.Now().Round(time.Second)
 	uptime := getUptime(CHANNEL)
 	vodID := getVodID(CHANNEL)
-	highlight = fmt.Sprintf("%s , %s , %s , %s , %s", vodID, uptime, user, context, t)
+	highlight := fmt.Sprintf("%s , %s , %s , %s , %s", vodID, uptime, user, context, t)
 	highlights.Append(highlight)
 	return fmt.Sprintf("Highlight added, %s.", user)
 }
